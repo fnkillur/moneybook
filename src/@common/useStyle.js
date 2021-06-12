@@ -1,5 +1,5 @@
 import React from 'react';
-import {useColorScheme} from 'react-native';
+import {useColorScheme, StyleSheet} from 'react-native';
 
 function useStyle() {
   const isDarkMode = useColorScheme() === 'dark';
