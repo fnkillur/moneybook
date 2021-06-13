@@ -63,7 +63,7 @@ function TabNavigator() {
         component={Calendar}
         options={{
           tabBarLabel: makeTabBarLabel(
-            '캘린더',
+            '가계부',
             selectedColor,
             unSelectedColor,
           ),

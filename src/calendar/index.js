@@ -9,28 +9,34 @@ import {
 } from 'react-native';
 import useStyle from '../@common/useStyle';
 import {ButtonGroup} from 'react-native-elements';
-import {getMonth} from 'date-fns';
+import {addMonths, format, setDate} from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Monthly from './Monthly';
+import Weekly from './Weekly';
+import List from './List';
 
 function Calendar() {
-  const {backgroundColor, selectedColor} = useStyle();
+  const {containerStyle, selectedColor} = useStyle();
   const [subTab, setSubTab] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const settingDate = 5;
+  const startDate = setDate(selectedDate, settingDate);
+  const endDate = addMonths(startDate, 1);
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor,
-        height: '100%',
-        paddingHorizontal: 20,
-      }}>
+    <SafeAreaView style={containerStyle}>
+      <Pressable
+        style={styles.monthSelector}
+        onPress={() => console.log('click')}>
+        <View style={{marginRight: 15}}>
+          <Text style={styles.month}>{format(startDate, 'M월 d일')}</Text>
+          <Text style={styles.month}>~</Text>
+          <Text style={styles.month}>{format(endDate, 'M월 d일')}</Text>
+        </View>
+        <Icon name="angle-down" size={20} />
+      </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Pressable
-          style={styles.monthSelector}
-          onPress={() => console.log('click')}>
-          <Text style={styles.month}>{`${getMonth(selectedDate) + 1}월`}</Text>
-          <Icon name="angle-down" size={20} />
-        </Pressable>
+        {subTab === 0 ? <Monthly /> : subTab === 1 ? <Weekly /> : <List />}
       </ScrollView>
       <View style={styles.subTabContainer}>
         <View style={styles.subTabInner}>
@@ -62,7 +68,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  month: {fontSize: 20, fontWeight: 'bold', marginRight: 10},
+  month: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   subTabContainer: {
     position: 'absolute',
     bottom: 15,

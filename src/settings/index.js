@@ -4,7 +4,7 @@ import {SafeAreaView, Text} from 'react-native';
 function Settings(props) {
   return (
     <SafeAreaView>
-      <Text>통계</Text>
+      <Text>설정</Text>
     </SafeAreaView>
   );
 }
