@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import useStyle from '../@common/useStyle';
 import {ButtonGroup} from 'react-native-elements';
-import {addMonths, format, setDate} from 'date-fns';
+import {subDays, addMonths, format, setDate} from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Monthly from './Monthly';
 import Weekly from './Weekly';
@@ -21,7 +21,7 @@ function Calendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const settingDate = 5;
   const startDate = setDate(selectedDate, settingDate);
-  const endDate = addMonths(startDate, 1);
+  const endDate = subDays(addMonths(startDate, 1), 1);
 
   return (
     <SafeAreaView style={containerStyle}>
