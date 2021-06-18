@@ -1,7 +1,14 @@
 import React from 'react';
-import {useColorScheme, StyleSheet} from 'react-native';
+import {StyleProp, useColorScheme} from 'react-native';
 
-function useStyle() {
+type CommonStyle = {
+  backgroundColor: string;
+  unSelectedColor: string;
+  selectedColor: string;
+  containerStyle: StyleProp<any>;
+};
+
+function useStyle(): CommonStyle {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundColor = isDarkMode ? '' : '#FAFAFA';
 

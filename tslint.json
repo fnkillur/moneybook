@@ -1,0 +1,16 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint-config-airbnb", "tslint-react"],
+  "jsRules": {},
+  "rules": {
+    "import-name": [false],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case" // 파스칼 케이스를 허용해야 import React from 'react'에서 React가 소문자 react로 린팅되지 않음
+    ],
+    "quotemark": [true, "single", "avoid-escape", "avoid-template"]
+  },
+  "rulesDirectory": []
+}

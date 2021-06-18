@@ -11,7 +11,7 @@ function Monthly(props) {
     <View style={containerStyle}>
       <View style={styles.row}>
         {HEADER.map(day => (
-          <View>
+          <View key={day}>
             <Text>{day}</Text>
           </View>
         ))}
