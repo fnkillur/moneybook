@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -9,25 +9,50 @@ import {
 } from 'react-native';
 import useStyle from '../@common/useStyle';
 import {ButtonGroup} from 'react-native-elements';
-import {subDays, addMonths, format, setDate} from 'date-fns';
+import {addMonths, format, setDate, subDays} from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Monthly from './Monthly';
 import Weekly from './Weekly';
 import List from './List';
+import BottomSelect from '../@common/BottonSheet';
+import database from '@react-native-firebase/database';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../modules';
+import {setStartMonthDate} from '../../modules/calendar';
 
 function Calendar() {
   const {containerStyle, selectedColor} = useStyle();
   const [subTab, setSubTab] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const settingDate = 5;
-  const startDate = setDate(selectedDate, settingDate);
+
+  const {startMonthDate} = useSelector((state: RootState) => state.calendar);
+  const dispatch = useDispatch();
+
+  const startDate = setDate(selectedDate, startMonthDate);
   const endDate = subDays(addMonths(startDate, 1), 1);
+
+  const calendarSelector: any = useRef();
+
+  useEffect(() => {
+    database()
+      .ref('/users/001')
+      .once('value')
+      .then(snapshot => {
+        dispatch(setStartMonthDate(snapshot.val().startMonthDate));
+      });
+  }, []);
+
+  console.log('사용자가 설정한 시작일: ', startMonthDate);
 
   return (
     <SafeAreaView style={containerStyle}>
       <Pressable
         style={styles.monthSelector}
-        onPress={() => console.log('click')}>
+        onPress={() => {
+          if (calendarSelector.current) {
+            calendarSelector.current.open();
+          }
+        }}>
         <View style={{marginRight: 15}}>
           <Text style={styles.month}>{format(startDate, 'M월 d일')}</Text>
           <Text style={styles.month}>~</Text>
@@ -57,6 +82,11 @@ function Calendar() {
           />
         </View>
       </View>
+      <BottomSelect title="달력 선택" slide={calendarSelector}>
+        <View>
+          <Text>하이루</Text>
+        </View>
+      </BottomSelect>
     </SafeAreaView>
   );
 }

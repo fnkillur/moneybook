@@ -8,10 +8,11 @@ import Calendar from './calendar';
 import useStyle from './@common/useStyle';
 import Statistics from './statistics';
 import Settings from './settings';
+import Login from './login/Login';
 
 const makeTabBarLabel =
-  (title, selectedColor, unSelectedColor) =>
-  ({focused}) =>
+  (title: string, selectedColor: string, unSelectedColor: string) =>
+  ({focused = false}) =>
     (
       <Text
         style={{
@@ -32,7 +33,7 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarIcon({focused}) {
-          let name;
+          let name = '';
           switch (route.name) {
             case 'Calendar':
               name = 'calendar-check';
@@ -93,7 +94,7 @@ function Navigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
-        {/*<Stack.Screen name='LoginScreen' component={LoginScreen}/>*/}
+        {/*<Stack.Screen name="LoginScreen" component={Login} />*/}
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
