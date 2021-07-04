@@ -1,4 +1,3 @@
-import React from 'react';
 import {StyleProp, useColorScheme} from 'react-native';
 
 type CommonStyle = {

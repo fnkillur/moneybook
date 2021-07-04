@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import useStyle from '../@common/useStyle';
 import {ButtonGroup} from 'react-native-elements';
-import {addMonths, format, setDate, subDays} from 'date-fns';
+import {format} from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Monthly from './Monthly';
 import Weekly from './Weekly';
@@ -18,31 +18,28 @@ import BottomSelect from '../@common/BottonSheet';
 import database from '@react-native-firebase/database';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../modules';
-import {setStartMonthDate} from '../../modules/calendar';
+import {setStartDateOfMonth} from '../../modules/calendar';
 
 function Calendar() {
   const {containerStyle, selectedColor} = useStyle();
   const [subTab, setSubTab] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const {startMonthDate} = useSelector((state: RootState) => state.calendar);
+  const {startDateOfMonth, startDate, endDate} = useSelector(
+    (state: RootState) => state.calendar,
+  );
   const dispatch = useDispatch();
-
-  const startDate = setDate(selectedDate, startMonthDate);
-  const endDate = subDays(addMonths(startDate, 1), 1);
 
   const calendarSelector: any = useRef();
 
   useEffect(() => {
     database()
-      .ref('/users/001')
+      .ref('/users/001/startDateOfMonth')
       .once('value')
       .then(snapshot => {
-        dispatch(setStartMonthDate(snapshot.val().startMonthDate));
+        dispatch(setStartDateOfMonth(snapshot.val()));
       });
   }, []);
 
-  console.log('사용자가 설정한 시작일: ', startMonthDate);
+  console.log('사용자가 설정한 시작일: ', startDateOfMonth);
 
   return (
     <SafeAreaView style={containerStyle}>
@@ -55,7 +52,7 @@ function Calendar() {
         }}>
         <View style={{marginRight: 15}}>
           <Text style={styles.month}>{format(startDate, 'M월 d일')}</Text>
-          <Text style={styles.month}>~</Text>
+          <Text style={styles.tilde}>~</Text>
           <Text style={styles.month}>{format(endDate, 'M월 d일')}</Text>
         </View>
         <Icon name="angle-down" size={20} />
@@ -98,21 +95,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  month: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  month: {fontSize: 18, fontWeight: 'bold', textAlign: 'left'},
+  tilde: {fontSize: 18, fontWeight: 'bold', textAlign: 'center'},
   subTabContainer: {
     position: 'absolute',
     bottom: 15,
     zIndex: 99,
     width: '100%',
   },
-  subTabInner: {
-    display: 'flex',
-    alignItems: 'center',
-  },
+  subTabInner: {display: 'flex', alignItems: 'center'},
   subTab: {
     width: '90%',
     backgroundColor: '#FFF',

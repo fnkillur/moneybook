@@ -1,53 +1,45 @@
-const SET_START_DATE = 'calendar/SET_START_DATE' as const;
-const SET_END_DATE = 'calendar/SET_END_DATE' as const;
-const SET_START_MONTH_DATE = 'calendar/SET_START_MONTH_DATE' as const;
+import {makeCalendarPeriod} from '../utils/dateUtils';
 
-export const setStartDate = (startDate: Date) => ({
-  type: SET_START_DATE,
+const SET_START_DATE_OF_MONTH = 'calendar/SET_START_MONTH_DATE' as const;
+const SET_CALENDAR_PERIOD = 'calendar/SET_CALENDAR_PERIOD' as const;
+
+export const setStartDateOfMonth = (startDateOfMonth: number) => ({
+  type: SET_START_DATE_OF_MONTH,
+  payload: startDateOfMonth,
+});
+export const setCalendarPeriod = (startDate: Date) => ({
+  type: SET_CALENDAR_PERIOD,
   payload: startDate,
-});
-export const setEndDate = (endDate: Date) => ({
-  type: SET_END_DATE,
-  payload: endDate,
-});
-export const setStartMonthDate = (startMonthDate: number) => ({
-  type: SET_START_MONTH_DATE,
-  payload: startMonthDate,
 });
 
 type CalendarAction =
-  | ReturnType<typeof setStartDate>
-  | ReturnType<typeof setEndDate>
-  | ReturnType<typeof setStartMonthDate>;
+  | ReturnType<typeof setStartDateOfMonth>
+  | ReturnType<typeof setCalendarPeriod>;
 
 type CalendarState = {
+  startDateOfMonth: number;
   startDate: Date;
   endDate: Date;
-  startMonthDate: number;
 };
 
+const initStartDate = new Date();
+const initStartDateOfMonth = 1;
 const initialState: CalendarState = {
-  startDate: new Date(),
-  endDate: new Date(),
-  startMonthDate: 1,
+  startDateOfMonth: initStartDateOfMonth,
+  ...makeCalendarPeriod(initStartDate, initStartDateOfMonth),
 };
 
 function calendar(state: CalendarState = initialState, action: CalendarAction) {
   switch (action.type) {
-    case SET_START_DATE:
+    case SET_START_DATE_OF_MONTH:
       return {
-        ...state,
-        startDate: action.payload,
+        startDateOfMonth: action.payload,
+        ...makeCalendarPeriod(state.startDate, action.payload),
       };
-    case SET_END_DATE:
+    case SET_CALENDAR_PERIOD:
       return {
         ...state,
-        endDate: action.payload,
-      };
-    case SET_START_MONTH_DATE:
-      return {
-        ...state,
-        startMonthDate: action.payload,
+        ...makeCalendarPeriod(action.payload, state.startDateOfMonth),
       };
     default:
       return state;
