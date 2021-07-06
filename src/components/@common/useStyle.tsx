@@ -9,7 +9,7 @@ type CommonStyle = {
 
 function useStyle(): CommonStyle {
   const isDarkMode = useColorScheme() === 'dark';
-  const backgroundColor = isDarkMode ? '' : '#FAFAFA';
+  const backgroundColor = isDarkMode ? '' : '#FFFFFF';
 
   return {
     backgroundColor,

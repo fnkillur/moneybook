@@ -23,7 +23,7 @@ import {setStartDateOfMonth} from '../../modules/calendar';
 function Calendar() {
   const {containerStyle, selectedColor} = useStyle();
   const [subTab, setSubTab] = useState(0);
-  const {startDateOfMonth, startDate, endDate} = useSelector(
+  const {startDate, endDate} = useSelector(
     (state: RootState) => state.calendar,
   );
   const dispatch = useDispatch();
@@ -32,14 +32,14 @@ function Calendar() {
 
   useEffect(() => {
     database()
-      .ref('/users/001/startDateOfMonth')
+      .ref('/settings/0001/startDateOfMonth')
       .once('value')
       .then(snapshot => {
-        dispatch(setStartDateOfMonth(snapshot.val()));
+        if (snapshot.val()) {
+          dispatch(setStartDateOfMonth(snapshot.val()));
+        }
       });
   }, []);
-
-  console.log('사용자가 설정한 시작일: ', startDateOfMonth);
 
   return (
     <SafeAreaView style={containerStyle}>
@@ -72,7 +72,7 @@ function Calendar() {
               fontSize: 14,
             }}
             innerBorderStyle={{width: 0}}
-            textStyle={{color: '#A4A4A4', fontWeight: 'bold', fontSize: 14}}
+            textStyle={{color: '#848484', fontWeight: 'bold', fontSize: 14}}
             buttons={['달력', '주간', '목록']}
             selectedIndex={subTab}
             onPress={index => setSubTab(index)}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   subTabInner: {display: 'flex', alignItems: 'center'},
   subTab: {
     width: '90%',
-    backgroundColor: '#FFF',
+    backgroundColor: '#F6F4F4',
     borderWidth: 0,
     borderRadius: 20,
     height: 40,
