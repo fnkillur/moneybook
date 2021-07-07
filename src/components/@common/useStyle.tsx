@@ -9,12 +9,12 @@ type CommonStyle = {
 
 function useStyle(): CommonStyle {
   const isDarkMode = useColorScheme() === 'dark';
-  const backgroundColor = isDarkMode ? '' : '#FFFFFF';
+  const backgroundColor = isDarkMode ? '' : '#F2F2F2';
 
   return {
     backgroundColor,
     unSelectedColor: '#A4A4A4',
-    selectedColor: 'rgb(73, 80, 87)',
+    selectedColor: '#151515',
     containerStyle: {
       backgroundColor,
       height: '100%',

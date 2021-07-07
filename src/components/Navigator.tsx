@@ -4,11 +4,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Calendar from './calendar';
 import useStyle from './@common/useStyle';
+import Calendar from './calendar';
+import List from './list';
 import Statistics from './statistics';
 import Settings from './settings';
-import Login from './login/Login';
 
 const makeTabBarLabel =
   (title: string, selectedColor: string, unSelectedColor: string) =>
@@ -17,7 +17,7 @@ const makeTabBarLabel =
       <Text
         style={{
           color: focused ? selectedColor : unSelectedColor,
-          fontSize: 11,
+          fontSize: 10,
           fontWeight: 'bold',
         }}>
         {title}
@@ -38,6 +38,9 @@ function TabNavigator() {
             case 'Calendar':
               name = 'calendar-check';
               break;
+            case 'List':
+              name = 'list';
+              break;
             case 'Statistics':
               name = 'chart-pie';
               break;
@@ -51,7 +54,7 @@ function TabNavigator() {
           return (
             <Icon
               name={name}
-              size={27}
+              size={20}
               color={focused ? selectedColor : unSelectedColor}
             />
           );
@@ -68,6 +71,13 @@ function TabNavigator() {
             selectedColor,
             unSelectedColor,
           ),
+        }}
+      />
+      <Tab.Screen
+        name="List"
+        component={List}
+        options={{
+          tabBarLabel: makeTabBarLabel('내역', selectedColor, unSelectedColor),
         }}
       />
       <Tab.Screen

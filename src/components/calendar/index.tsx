@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -8,22 +8,19 @@ import {
   View,
 } from 'react-native';
 import useStyle from '../@common/useStyle';
-import {ButtonGroup} from 'react-native-elements';
 import {format} from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Monthly from './Monthly';
-import Weekly from './Weekly';
-import List from './List';
 import BottomSelect from '../@common/BottonSheet';
 import database from '@react-native-firebase/database';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../modules';
 import {setStartDateOfMonth} from '../../modules/calendar';
+import DayDetail from './DayDetail';
 
 function Calendar() {
-  const {containerStyle, selectedColor} = useStyle();
-  const [subTab, setSubTab] = useState(0);
-  const {startDate, endDate} = useSelector(
+  const {containerStyle} = useStyle();
+  const {startDate, endDate, selectDate} = useSelector(
     (state: RootState) => state.calendar,
   );
   const dispatch = useDispatch();
@@ -41,6 +38,7 @@ function Calendar() {
       });
   }, []);
 
+  console.log(selectDate);
   return (
     <SafeAreaView style={containerStyle}>
       <Pressable
@@ -58,27 +56,9 @@ function Calendar() {
         <Icon name="angle-down" size={20} />
       </Pressable>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {subTab === 0 ? <Monthly /> : subTab === 1 ? <Weekly /> : <List />}
+        <Monthly />
+        <DayDetail />
       </ScrollView>
-      <View style={styles.subTabContainer}>
-        <View style={styles.subTabInner}>
-          <ButtonGroup
-            containerStyle={styles.subTab}
-            buttonStyle={{borderRadius: 15}}
-            selectedButtonStyle={{backgroundColor: selectedColor}}
-            selectedTextStyle={{
-              color: '#FFF',
-              fontWeight: 'bold',
-              fontSize: 14,
-            }}
-            innerBorderStyle={{width: 0}}
-            textStyle={{color: '#848484', fontWeight: 'bold', fontSize: 14}}
-            buttons={['달력', '주간', '목록']}
-            selectedIndex={subTab}
-            onPress={index => setSubTab(index)}
-          />
-        </View>
-      </View>
       <BottomSelect title="달력 선택" slide={calendarSelector}>
         <View>
           <Text>하이루</Text>
@@ -90,28 +70,15 @@ function Calendar() {
 
 const styles = StyleSheet.create({
   monthSelector: {
+    backgroundColor: '#FFF',
     paddingHorizontal: 20,
-    marginVertical: 15,
+    paddingVertical: 10,
+    marginVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
   month: {fontSize: 18, fontWeight: 'bold', textAlign: 'left'},
   tilde: {fontSize: 18, fontWeight: 'bold', textAlign: 'center'},
-  subTabContainer: {
-    position: 'absolute',
-    bottom: 15,
-    zIndex: 99,
-    width: '100%',
-  },
-  subTabInner: {display: 'flex', alignItems: 'center'},
-  subTab: {
-    width: '90%',
-    backgroundColor: '#F6F4F4',
-    borderWidth: 0,
-    borderRadius: 20,
-    height: 40,
-    padding: 5,
-  },
 });
 
 export default Calendar;
