@@ -35,7 +35,7 @@ function Monthly() {
         <View style={styles.headerRow}>
           {HEADER.map(day => (
             <View key={day} style={{width: totalWidth / 7}}>
-              <Text style={styles.dateCell}>{day}</Text>
+              <Text style={styles.headerCell}>{day}</Text>
             </View>
           ))}
         </View>
@@ -46,7 +46,7 @@ function Monthly() {
                 const date: Date = addDays(startOfWeek, day);
                 const isThisMonth = isSameMonth(date, startDate);
                 const isSelectDay = isSameDay(date, selectDate);
-                const textStyle = isSelectDay
+                const dateStyle = isSelectDay
                   ? {...styles.dateCell, color: '#FFF'}
                   : isThisMonth
                   ? styles.dateCell
@@ -63,7 +63,9 @@ function Monthly() {
                     }}
                     onPress={() => dispatch(setSelectDate(date))}>
                     <View style={isSelectDay ? styles.selectBox : null}>
-                      <Text style={textStyle}>{date.getDate()}</Text>
+                      <Text style={dateStyle}>{date.getDate()}</Text>
+                      {/*<Text style={styles.spend}>-120,500</Text>*/}
+                      {/*<Text style={styles.income}>+3,120,500</Text>*/}
                     </View>
                   </Pressable>
                 );
@@ -90,6 +92,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 25,
   },
+  headerCell: {
+    textAlign: 'center',
+    fontSize: 13,
+    color: '#848484',
+    lineHeight: 30,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -98,20 +106,29 @@ const styles = StyleSheet.create({
   },
   dateCell: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 13,
     color: '#141414',
     lineHeight: 30,
   },
   notThisMonth: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 13,
     color: '#BDBDBD',
+    lineHeight: 30,
   },
   selectBox: {
     borderRadius: 12,
     backgroundColor: '#151515',
     width: 30,
     height: 30,
+  },
+  spend: {
+    fontSize: 9,
+    textAlign: 'left',
+  },
+  income: {
+    fontSize: 9,
+    textAlign: 'left',
   },
   bottomBorder: {
     height: 30,

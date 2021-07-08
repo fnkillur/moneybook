@@ -41,20 +41,31 @@ function Calendar() {
   console.log(selectDate);
   return (
     <SafeAreaView style={containerStyle}>
-      <Pressable
-        style={styles.monthSelector}
-        onPress={() => {
-          if (calendarSelector.current) {
-            calendarSelector.current.open();
-          }
-        }}>
-        <View style={{marginRight: 15}}>
-          <Text style={styles.month}>{format(startDate, 'M월 d일')}</Text>
-          <Text style={styles.tilde}>~</Text>
-          <Text style={styles.month}>{format(endDate, 'M월 d일')}</Text>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => {
+            if (calendarSelector.current) {
+              calendarSelector.current.open();
+            }
+          }}>
+          <View style={styles.monthPeriod}>
+            <Text style={styles.month}>
+              {format(startDate, 'M월 d일')} ~ {format(endDate, 'M월 d일')}
+            </Text>
+            <Icon name="angle-down" size={20} style={{marginLeft: 10}} />
+          </View>
+        </Pressable>
+      </View>
+      <View style={styles.summary}>
+        <View style={styles.summaryBox}>
+          <Text style={styles.summaryKey}>수입</Text>
+          <Text style={styles.summaryKey}>3,400,000</Text>
         </View>
-        <Icon name="angle-down" size={20} />
-      </Pressable>
+        <View style={styles.summaryBox}>
+          <Text style={styles.summaryKey}>지출</Text>
+          <Text style={styles.summaryKey}>-1,750,00</Text>
+        </View>
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Monthly />
         <DayDetail />
@@ -69,16 +80,28 @@ function Calendar() {
 }
 
 const styles = StyleSheet.create({
-  monthSelector: {
-    backgroundColor: '#FFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  header: {
     marginVertical: 10,
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
-  month: {fontSize: 18, fontWeight: 'bold', textAlign: 'left'},
-  tilde: {fontSize: 18, fontWeight: 'bold', textAlign: 'center'},
+  monthPeriod: {flexDirection: 'row'},
+  month: {fontSize: 16, fontWeight: 'bold'},
+  summary: {
+    textAlign: 'left',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#F2F2F2',
+  },
+  summaryBox: {
+    width: 150,
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: '#FFF',
+  },
+  summaryKey: {fontSize: 15, fontWeight: 'bold'},
 });
 
 export default Calendar;
